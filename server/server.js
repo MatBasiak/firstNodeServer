@@ -6,11 +6,13 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/auth", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/auth", {
+  useNewUrlParser: true
+});
 mongoose.set("useCreateIndex", true);
 
 const { User } = require("./models/user");
-const{auth}=require('./middleware/auth')
+const { auth } = require("./middleware/auth");
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -41,8 +43,8 @@ app.post("/api/user/login", (req, res) => {
   });
 });
 
-app.get("/user/profile",auth ,(req, res) => {
-    res.status(200).send(req.token)
+app.get("/user/profile", auth, (req, res) => {
+  res.status(200).send(req.token);
 });
 const port = process.env.PORT || 3000;
 
